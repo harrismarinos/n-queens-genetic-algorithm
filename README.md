@@ -294,10 +294,10 @@ streamlit run app.py
       <th width="180">Περιστροφή 270°</th>
     </tr>
     <tr>
-      <td><img src="misc/sym_0_original.png" width="160"></td>
-      <td><img src="misc/sym_1_rot90.png" width="160"></td>
-      <td><img src="misc/sym_2_rot180.png" width="160"></td>
-      <td><img src="misc/sym_3_rot270.png" width="160"></td>
+      <td><img src="misc/sym_0_original.png" width="300px"></td>
+      <td><img src="misc/sym_1_rot90.png" width="300px"></td>
+      <td><img src="misc/sym_2_rot180.png" width="300px"></td>
+      <td><img src="misc/sym_3_rot270.png" width="300px"></td>
     </tr>
     <tr>
       <th width="180">Ανάκλαση οριζόντια</th>
@@ -306,10 +306,10 @@ streamlit run app.py
       <th width="180">Ανάκλαση δευτ. διαγ.</th>
     </tr>
     <tr>
-      <td><img src="misc/sym_4_fliph.png" width="160"></td>
-      <td><img src="misc/sym_5_flipv.png" width="160"></td>
-      <td><img src="misc/sym_6_flipd1.png" width="160"></td>
-      <td><img src="misc/sym_7_flipd2.png" width="160"></td>
+      <td><img src="misc/sym_4_fliph.png" width="300px"></td>
+      <td><img src="misc/sym_5_flipv.png" width="300px"></td>
+      <td><img src="misc/sym_6_flipd1.png" width="300px"></td>
+      <td><img src="misc/sym_7_flipd2.png" width="300px"></td>
     </tr>
   </table>
 </div>

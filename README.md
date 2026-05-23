@@ -314,6 +314,13 @@ streamlit run app.py
   </table>
 </div>
 
+## Future Work
+
+- [ ] Zoom / fullscreen mode για τη σκακιέρα
+- [ ] Σύγκριση απόδοσης μεταξύ διαφορετικών παραμέτρων
+- [ ] Export λύσης σε PNG
+- [ ] Animated replay της εξέλιξης ανά γενεά
+
 ## Βιβλιογραφία
 
 - Russell, S., & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th ed.). Pearson.

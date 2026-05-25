@@ -11,6 +11,7 @@ def get_image_base64(path):
             encoded = base64.b64encode(image_file.read()).decode()
             return f"data:image/png;base64,{encoded}"
     return ""
+
 def render_chessboard(solution: list[int], n: int) -> str:
     queen_to_base64 = get_image_base64("./imgs/queen.png")
     red_queen_to_base64 = get_image_base64("./imgs/red_queen.png")
@@ -54,6 +55,7 @@ def render_chessboard(solution: list[int], n: int) -> str:
     f"{rows_html}</table>"
     f"</div>"
 )
+
 st.set_page_config(
     page_title="N-Queens Problem - A Genetic Algorithm",
     page_icon="♛",

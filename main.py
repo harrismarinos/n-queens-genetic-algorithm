@@ -1,5 +1,6 @@
 import streamlit as st
-from ga import count_conflicts, run_ga
+from ga import run_ga
+from queens import count_conflicts, fitness_func
 import time
 import base64
 import os
@@ -78,7 +79,7 @@ with st.sidebar:
     n = st.slider("Board size (N)", min_value=4, max_value=20, value=8, step=1)
     pop_size = st.slider("Population size", min_value=20, max_value=500, value=100, step=10)
     max_gen = st.number_input(
-        "Max generations", min_value=1000, max_value=1_000_000, value=500_000, step=1000
+        "Max generations", min_value=1000, max_value=1_000_000, value=1000, step=1000
     )
     # Add Mutation Options
     mutation_type = st.selectbox(
@@ -171,6 +172,7 @@ if run_btn:
 
     result = run_ga(
         n=n,
+        fitness_func=fitness_func,
         pop_size=pop_size,
         num_generations=int(max_gen),
         mutation_probability=mutation_prob,

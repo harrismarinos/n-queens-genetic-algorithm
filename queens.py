@@ -1,5 +1,3 @@
-from ga import run_ga
-
 def fitness_func(ga_instance, solution, _):
     n = len(solution)
     conflicts = 0

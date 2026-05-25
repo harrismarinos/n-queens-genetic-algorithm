@@ -4,7 +4,7 @@ import random
 def run_ga(
     n: int = 8,
     pop_size: int = 100,
-    num_generations: int = 500_000,
+    num_generations: int = 1000,
     mutation_probability: float = 0.05,
     mutation_type: str = "random",
     crossover_type: str = "single_point",

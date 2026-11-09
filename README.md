@@ -1,87 +1,87 @@
-# ♛ N-Queens Problem — Επίλυση με Γενετικό Αλγόριθμο
+# ♛ N-Queens Problem — Solving with a Genetic Algorithm
 
-> Εργασία στο πλαίσιο του μαθήματος Ευφυή Συστήματα και Συστήματα Υποστήριξης Αποφάσεων
-> Υλοποίηση σε Python με χρήση PyGAD & Streamlit
+> Project for the course Intelligent Systems and Decision Support Systems
+> Implemented in Python using PyGAD & Streamlit
 
 ## Live Demo
 
-Δοκίμασε την εφαρμογή live χωρίς εγκατάσταση:
+Try the app live without any installation:
 
 **[▶ Open in Streamlit](https://nqueens-ga.streamlit.app/)**
 
 ---
 
-## Περιεχόμενα
+## Contents
 
-1. [Περιγραφή Προβλήματος](#1-περιγραφή-προβλήματος)
-2. [Γενετικός Αλγόριθμος — Θεωρητικό Υπόβαθρο](#2-γενετικός-αλγόριθμος--θεωρητικό-υπόβαθρο)
-3. [Αναπαράσταση Λύσης](#3-αναπαράσταση-λύσης)
-4. [Συνάρτηση Καταλληλότητας (Fitness Function)](#4-συνάρτηση-καταλληλότητας-fitness-function)
-5. [Τελεστές του Αλγορίθμου](#5-τελεστές-του-αλγορίθμου)
-6. [Δομή Κώδικα](#6-δομή-κώδικα)
-7. [Διεπαφή Χρήστη (Streamlit)](#7-διεπαφή-χρήστη-streamlit)
-8. [Εγκατάσταση & Εκτέλεση](#8-εγκατάσταση--εκτέλεση)
-9. [Παράμετροι & Επίδραση στην Απόδοση](#9-παράμετροι--επίδραση-στην-απόδοση)
-10. [Αποτελέσματα & Παρατηρήσεις](#10-αποτελέσματα--παρατηρήσεις)
-
----
-
-## 1. Περιγραφή Προβλήματος
-
-Το **πρόβλημα των N-Queens** ζητά την τοποθέτηση **N βασιλισσών** σε NxN σκακιέρα έτσι ώστε **καμία να μην απειλεί καμία άλλη**. Δύο βασίλισσες συγκρούονται εάν βρίσκονται:
-
-- Στην **ίδια γραμμή** (horizontal conflict)
-- Στην **ίδια στήλη** (vertical conflict)
-- Στην **ίδια διαγώνιο** (diagonal conflict)
-
-Το πρόβλημα γίνεται υπολογιστικά δύσκολο για εξαντλητική αναζήτηση καθώς το N μεγαλώνει, 
-καθώς ο χώρος αναζήτησης αυξάνεται με ρυθμό N!. Για N=20, αυτό αντιστοιχεί σε:
-$20! \approx 2.4 \times 20^{18}$
-πιθανές διατάξεις, καθιστώντας αναγκαία τη χρήση ευρετικών 
-μεθόδων όπως ο Γενετικός Αλγόριθμος.
+1. [Problem Description](#1-problem-description)
+2. [Genetic Algorithm — Theoretical Background](#2-genetic-algorithm--theoretical-background)
+3. [Solution Representation](#3-solution-representation)
+4. [Fitness Function](#4-fitness-function)
+5. [Algorithm Operators](#5-algorithm-operators)
+6. [Code Structure](#6-code-structure)
+7. [User Interface (Streamlit)](#7-user-interface-streamlit)
+8. [Installation & Execution](#8-installation--execution)
+9. [Parameters & Impact on Performance](#9-parameters--impact-on-performance)
+10. [Results & Observations](#10-results--observations)
 
 ---
 
-## 2. Γενετικός Αλγόριθμος — Θεωρητικό Υπόβαθρο
+## 1. Problem Description
 
-Ο **Γενετικός Αλγόριθμος (GA)** είναι μεθευρετική (metaheuristic) τεχνική εμπνευσμένη από τη βιολογική εξέλιξη. Λειτουργεί πάνω σε έναν **πληθυσμό υποψήφιων λύσεων** (χρωμοσώματα) και βελτιώνεται μέσα από γενεές.
+The **N-Queens problem** asks for the placement of **N queens** on an NxN chessboard such that **no queen threatens any other**. Two queens conflict if they are on:
 
-### Κύκλος Εξέλιξης
+- The **same row** (horizontal conflict)
+- The **same column** (vertical conflict)
+- The **same diagonal** (diagonal conflict)
+
+The problem becomes computationally hard for exhaustive search as N grows, 
+since the search space grows at a rate of N!. For N=20, this corresponds to:
+$20! \approx 2.4 \times 10^{18}$
+possible arrangements, making the use of heuristic 
+methods such as the Genetic Algorithm necessary.
+
+---
+
+## 2. Genetic Algorithm — Theoretical Background
+
+A **Genetic Algorithm (GA)** is a metaheuristic technique inspired by biological evolution. It operates on a **population of candidate solutions** (chromosomes) and improves over successive generations.
+
+### Evolution Cycle
 ![Genetic Algorithm Diagram](misc/genetic-algorithm-diagram.png)
 
-### Βασικές Αρχές
+### Core Principles
 
-| Έννοια | Βιολογικό Ανάλογο | Στο Πρόβλημα |
+| Concept | Biological Analogue | In the Problem |
 |---|---|---|
-| Χρωμόσωμα | DNA | Διάταξη βασιλισσών |
-| Γονίδιο | Βάση DNA | Γραμμή κάθε βασίλισσας |
-| Fitness | Επιβίωση | Αντίστροφο των conflicts |
-| Crossover | Αναπαραγωγή | Ανταλλαγή τμημάτων λύσης |
-| Mutation | Τυχαία μεταλλαγή | Τυχαία αλλαγή θέσης |
+| Chromosome | DNA | Queen arrangement |
+| Gene | DNA base | Row of each queen |
+| Fitness | Survival | Inverse of conflicts |
+| Crossover | Reproduction | Exchange of solution segments |
+| Mutation | Random mutation | Random change of position |
 
 ---
 
-## 3. Αναπαράσταση Λύσης
+## 3. Solution Representation
 
-Κάθε λύση αναπαρίσταται ως **λίστα ακεραίων** μήκους N, όπου το **index** αντιστοιχεί 
-στη στήλη και το **value** στη γραμμή της βασίλισσας. Αυτή η αναπαράσταση συμπιέζει 
-το χρωμόσωμα από έναν N×N δισδιάστατο πίνακα ($N^{2}$ γονίδια) σε μία μονοδιάστατη 
-λίστα (N γονίδια), μειώνοντας δραματικά τον χώρο αναζήτησης.
+Each solution is represented as a **list of integers** of length N, where the **index** corresponds 
+to the column and the **value** to the row of the queen. This representation compresses 
+the chromosome from an N×N two-dimensional array ($N^{2}$ genes) into a one-dimensional 
+list (N genes), dramatically reducing the search space.
 
 ```
-Παράδειγμα για N=8:
+Example for N=8:
 index (col):  [0, 1, 2, 3, 4, 5, 6, 7]
 value (row):  [2, 4, 6, 0, 3, 1, 7, 5]
 
-Αντί για 8×8 = 64 γονίδια → μόνο 8 γονίδια
+Instead of 8×8 = 64 genes → only 8 genes
 ```
-![Chess Board Review](misc/chess-board-preview.png)
+![Chess Board Preview](misc/chess-board-preview.png)
 
-Αυτή η αναπαράσταση **εξαλείφει αυτόματα τις κάθετες συγκρούσεις**, μιας και κάθε στήλη έχει ακριβώς μία βασίλισσα. Ο αλγόριθμος χρησιμοποιεί `allow_duplicate_genes=False` για να αποτρέψει οριζόντιες συγκρούσεις κατά την αρχικοποίηση — ο πληθυσμός ξεκινά ως σύνολο **permutations** του `[0, N-1]`.
+This representation **automatically eliminates vertical conflicts**, since each column has exactly one queen. The algorithm uses `allow_duplicate_genes=False` to prevent horizontal conflicts during initialization — the population starts as a set of **permutations** of `[0, N-1]`.
 
 ---
 
-## 4. Συνάρτηση Καταλληλότητας (Fitness Function)
+## 4. Fitness Function
 
 ```python
 def fitness_func(ga_instance, solution, _):
@@ -97,101 +97,101 @@ def fitness_func(ga_instance, solution, _):
     return -conflicts
 ```
 
-- **Χρονική πολυπλοκότητα:** $O(N^2)$ ανά χρωμόσωμα
-- **Εύρος τιμών:** `[-max_conflicts, 0]`
-- **Βέλτιστη τιμή:** `0` (καμία σύγκρουση → λύση βρέθηκε)
-- **Τερματισμός:** Ο αλγόριθμος σταματά αμέσως μόλις `fitness >= 0`
+- **Time complexity:** $O(N^2)$ per chromosome
+- **Value range:** `[-max_conflicts, 0]`
+- **Optimal value:** `0` (no conflicts → solution found)
+- **Termination:** The algorithm stops as soon as `fitness >= 0`
 
-Ο αρνητικός ορισμός (αντί penalty) επιτρέπει στο PyGAD να **μεγιστοποιεί** το fitness, κατευθύνοντας φυσικά την αναζήτηση προς μηδενικά conflicts.
+The negative definition (instead of a penalty) allows PyGAD to **maximize** the fitness, naturally steering the search toward zero conflicts.
 
 ---
 
-## 5. Τελεστές του Αλγορίθμου
+## 5. Algorithm Operators
 
-### 5.1 Επιλογή Γονέων (Parent Selection)
+### 5.1 Parent Selection
 
-| Τύπος | Περιγραφή |
+| Type | Description |
 |---|---|
-| `tournament` | Τυχαίες ομάδες, νικά ο καλύτερος — ισορροπία πίεσης |
-| `rank` | Επιλογή με βάση κατάταξη, όχι απόλυτο fitness |
-| `rws` | Roulette Wheel — πιθανότητα ανάλογη fitness |
-| `random` | Τυχαία επιλογή — για σύγκριση baseline |
-> Παρατήρηση: Η Τεχνική Roulette Wheel δεν λειτουργεί για αρνητικό `fitness score`
-### 5.2 Διασταύρωση (Crossover)
+| `tournament` | Random groups, the best one wins — balanced selection pressure |
+| `rank` | Selection based on ranking, not absolute fitness |
+| `rws` | Roulette Wheel — probability proportional to fitness |
+| `random` | Random selection — as a baseline for comparison |
+> Note: The Roulette Wheel technique does not work with a negative `fitness score`
+### 5.2 Crossover
 
-| Τύπος | Περιγραφή |
+| Type | Description |
 |---|---|
-| `single_point` | Ένα τυχαίο σημείο τομής |
-| `two_points` | Δύο σημεία τομής |
-| `uniform` | Κάθε γονίδιο επιλέγεται ανεξάρτητα |
-| `scattered` | Τυχαία μάσκα bits |
+| `single_point` | A single random cut point |
+| `two_points` | Two cut points |
+| `uniform` | Each gene is chosen independently |
+| `scattered` | Random bit mask |
 
-### 5.3 Μετάλλαξη (Mutation)
+### 5.3 Mutation
 
-| Τύπος | Περιγραφή |
+| Type | Description |
 |---|---|
-| `random` | Αντικατάσταση γονιδίου με τυχαία τιμή |
-| `swap` | Εναλλαγή δύο τυχαίων γονιδίων |
-| `inversion` | Αναστροφή τμήματος χρωμοσώματος |
-| `scramble` | Ανακάτεμα τμήματος χρωμοσώματος |
+| `random` | Replaces a gene with a random value |
+| `swap` | Swaps two random genes |
+| `inversion` | Reverses a segment of the chromosome |
+| `scramble` | Shuffles a segment of the chromosome |
 
-### 5.4 Ελιτισμός
+### 5.4 Elitism
 
 ```python
+keep_elitism = 0              # required for keep_parents to take effect (PyGAD ≥ 2.18)
 keep_parents = pop_size // 2
 ```
 
-Το 50% των καλύτερων ατόμων διατηρείται σε κάθε γενεά, αποτρέποντας την **απώλεια καλών λύσεων**.
+50% of the population (the selected parents) is carried over to the next generation, reducing the risk of **losing good solutions**.
 
 ---
 
-## 6. Δομή Κώδικα
+## 6. Code Structure
 
 ```
 n-queens-ga/
 │
 ├── app.py          # Streamlit UI — visualization & parameter controls
-├── ga.py           # Γενετικός αλγόριθμος (PyGAD wrapper)
-├── imgs/
-│   ├── queen.png       # Εικόνα βασίλισσας (χωρίς σύγκρουση)
-│   └── red_queen.png   # Εικόνα βασίλισσας (με σύγκρουση)
+├── ga.py           # Genetic algorithm (PyGAD wrapper)
+├── misc/               # Images used in the app and this README
+├── requirements.txt
 └── README.md
 ```
 
-### `ga.py` — Βασικές Συναρτήσεις
+### `ga.py` — Core Functions
 
-| Συνάρτηση | Περιγραφή |
+| Function | Description |
 |---|---|
-| `run_ga(...)` | Εκτελεί τον γενετικό αλγόριθμο, επιστρέφει λύση |
-| `count_conflicts(board)` | Μετράει τις συγκρούσεις μιας λύσης |
-| `board_to_2d(board)` | Μετατρέπει λίστα σε 2D πίνακα |
+| `run_ga(...)` | Runs the genetic algorithm and returns the solution |
+| `count_conflicts(board)` | Counts the conflicts of a solution |
+| `board_to_2d(board)` | Converts the list into a 2D array |
 
-### `app.py` — Βασικά Στοιχεία
+### `app.py` — Key Components
 
-| Στοιχείο | Περιγραφή |
+| Component | Description |
 |---|---|
-| `render_chessboard(solution, n)` | Παράγει HTML σκακιέρα με inline SVG queens |
-| `on_gen(gen, fitness, best_sol)` | Callback ανά γενεά — ενημερώνει UI |
-| `UI_THROTTLE = 0.25s` | Rate limiting για το Streamlit refresh |
-| `shared{}` | Κοινό state μεταξύ callback και main loop |
+| `render_chessboard(solution, n)` | Generates an HTML chessboard with inline SVG queens |
+| `on_gen(gen, fitness, best_sol)` | Per-generation callback — updates the UI |
+| `UI_THROTTLE = 0.25s` | Rate limiting for the Streamlit refresh |
+| `shared{}` | Shared state between the callback and the main loop |
 
 ---
 
-## 7. Διεπαφή Χρήστη (Streamlit)
+## 7. User Interface (Streamlit)
 
-Η εφαρμογή οπτικοποιεί σε **πραγματικό χρόνο** την εξέλιξη του αλγορίθμου:
+The app visualizes the evolution of the algorithm in **real time**:
 
 - **Live metrics:** Generation, Best Fitness, Conflicts, Elapsed time
-- **Live board:** Η σκακιέρα ενημερώνεται κάθε 250ms με το best solution
-- **Conflict highlighting:** Βασίλισσες σε conflict εμφανίζονται με **κόκκινο** χρώμα
+- **Live board:** The chessboard updates every 250ms with the best solution
+- **Conflict highlighting:** Queens in conflict are shown in **red**
 - **Adaptive board size:** `cell = min(60, 600 // n)` — N=8 → 60px/cell, N=20 → 30px/cell
-- **Final state:** Πράσινο border αν λύθηκε, κόκκινο αν όχι
+- **Final state:** Green border if solved, red if not
 
 ---
 
-## 8. Εγκατάσταση & Εκτέλεση
+## 8. Installation & Execution
 
-### Απαιτήσεις
+### Requirements
 
 ```bash
 python -m venv .venv
@@ -209,42 +209,47 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Εκτέλεση
+### Run
 
 ```bash
 streamlit run app.py
 ```
 
-Η εφαρμογή ανοίγει αυτόματα στο `http://localhost:8501`.
+The app opens automatically at `http://localhost:8501`.
 
 ---
 
-## 9. Παράμετροι & Επίδραση στην Απόδοση
+## 9. Parameters & Impact on Performance
 
-| Παράμετρος | Προτεινόμενη Τιμή | Επίδραση |
+| Parameter | Recommended Value | Effect |
 |---|---|---|
-| `pop_size` | 100–200 | Μεγαλύτερος → πιο αργός ανά γενεά, καλύτερη κάλυψη χώρου |
-| `mutation_probability` | 0.05–0.15 | Πολύ χαμηλή → stagnation, πολύ υψηλή → random search |
-| `parent_selection` | `tournament` | Καλύτερη ισορροπία exploration/exploitation |
-| `crossover_type` | `single_point` | Γρήγορος και αποτελεσματικός για permutations |
-| `mutation_type` | `swap` | Καλή αρχική επιλογή — απλός και αποτελεσματικός |
+| `pop_size` | 100–200 | Larger → slower per generation, better coverage of the search space |
+| `mutation_probability` | 0.05–0.15 | Too low → stagnation, too high → random search |
+| `parent_selection` | `tournament` | Best balance between exploration/exploitation |
+| `crossover_type` | `single_point` | Simple and fast, but does not preserve permutations (see note below) |
+| `mutation_type` | `swap` | Good starting choice — simple and effective |
 
-> **Σημείωση:** Τα `swap`, `inversion` και `scramble` mutation διατηρούν το permutation 
-> property καθώς απλώς αναδιατάσσουν υπάρχουσες τιμές, αποτρέποντας duplicates στο 
-> χρωμόσωμα. Το `random` mutation δεν έχει αυτή την εγγύηση — το PyGAD το διαχειρίζεται 
-> μέσω του `allow_duplicate_genes=False`, αλλά αυτό προσθέτει overhead στον αλγόριθμο.
+> **Note:** The `swap`, `inversion` and `scramble` mutations preserve the permutation 
+> property since they simply reorder existing values, preventing duplicates in the 
+> chromosome. The `random` mutation has no such guarantee — PyGAD handles it 
+> via `allow_duplicate_genes=False`, but this adds overhead to the algorithm.
+>
+> The same applies to the standard crossover operators (`single_point`, `two_points`, 
+> `uniform`, `scattered`): combining segments of two permutations usually produces 
+> duplicate genes, which then have to be repaired. Permutation-specific operators such 
+> as PMX (Partially Mapped Crossover) or OX (Order Crossover) avoid this by design.
 
 ---
 
-## 10. Αποτελέσματα & Παρατηρήσεις
+## 10. Results & Observations
 
-- Για **N ≤ 12**, ο αλγόριθμος βρίσκει λύση σχεδόν πάντα εντός λίγων δευτερολέπτων με default παραμέτρους.
-- Για **N = 20**, απαιτείται μεγαλύτερος πληθυσμός (200+) και υψηλότερο mutation rate.
-- Ο συνδυασμός `tournament selection + swap mutation` έδειξε **ταχύτερη σύγκλιση** στις δοκιμές.
-- Το πρόβλημα επιδέχεται **πολλαπλές βέλτιστες λύσεις** — για N=8 υπάρχουν 92 διαφορετικές.
+- For **N ≤ 12**, the algorithm almost always finds a solution within a few seconds using the default parameters.
+- For **N = 20**, a larger population (200+) and a higher mutation rate are required.
+- The combination `tournament selection + swap mutation` showed **faster convergence** in testing.
+- The problem admits **multiple optimal solutions** — for N=8 there are 92 distinct ones.
 
-### Αριθμός Λύσεων ανά N (OEIS A000170)
-| Board size | Total Solutions              | Time to find all solutions (ms) |
+### Number of Solutions per N (OEIS A000170)
+| Board size | Unique Solutions       | Total Solutions                 |
 | ---------- | ---------------------- | ------------------------------- |
 | 1          | 1                      | 1                               |
 | 2          | 0                      | 0                               |
@@ -274,24 +279,24 @@ streamlit run app.py
 | 26         | 2,789,712,466,510,289  | 22,317,699,616,364,044          |
 | 27         | 29,363,495,934,315,694 | 234,907,967,154,122,528         |
 ---
-Οι **συνολικές** λύσεις περιλαμβάνουν όλες τις διατάξεις, συμπεριλαμβανομένων των
-συμμετρικών παραλλαγών. Οι **μοναδικές** (fundamental) μετρούν κάθε διάταξη μία φορά —
-κάθε μοναδική λύση παράγει έως 8 παραλλαγές μέσω 3 περιστροφών (90°, 180°, 270°)
-και 4 ανακλάσεων (οριζόντια, κάθετη, κύρια διαγώνιος, δευτερεύουσα διαγώνιος).
-Για N=8: 92 συνολικές ÷ 8 παραλλαγές ≈ 12 μοναδικές λύσεις. Αξιοσημείωτο είναι
-ότι το N=6 έχει λιγότερες λύσεις από το N=5, αποδεικνύοντας ότι δεν υπάρχει
-μονοτονική αύξηση — και κανένας γνωστός τύπος δεν προβλέπει τον ακριβή αριθμό
-για γενικό N.
+**Total** solutions include every arrangement, including symmetric variants.
+**Unique** (fundamental) solutions count each arrangement once —
+each unique solution produces up to 8 variants through 3 rotations (90°, 180°, 270°)
+and 4 reflections (horizontal, vertical, main diagonal, anti-diagonal).
+For N=8: 92 total ÷ 8 variants ≈ 12 unique solutions. Notably,
+N=6 has fewer solutions than N=5, showing that there is no
+monotonic growth — and no known formula predicts the exact number
+for general N.
 
-Παράδειγμα συμμετρίας για N=8 — η ίδια μοναδική λύση και οι 7 μετασχηματισμοί της:
+Symmetry example for N=8 — the same unique solution and its 7 transformations:
 
 <div align="center">
   <table style="table-layout: fixed; width: 100%;">
     <tr>
-      <th width="180">Αρχική</th>
-      <th width="180">Περιστροφή 90°</th>
-      <th width="180">Περιστροφή 180°</th>
-      <th width="180">Περιστροφή 270°</th>
+      <th width="180">Original</th>
+      <th width="180">Rotation 90°</th>
+      <th width="180">Rotation 180°</th>
+      <th width="180">Rotation 270°</th>
     </tr>
     <tr>
       <td><img src="misc/sym_0_original.png" width="300px"></td>
@@ -300,10 +305,10 @@ streamlit run app.py
       <td><img src="misc/sym_3_rot270.png" width="300px"></td>
     </tr>
     <tr>
-      <th width="180">Ανάκλαση οριζόντια</th>
-      <th width="180">Ανάκλαση κάθετη</th>
-      <th width="180">Ανάκλαση κύριας διαγ.</th>
-      <th width="180">Ανάκλαση δευτ. διαγ.</th>
+      <th width="180">Horizontal reflection</th>
+      <th width="180">Vertical reflection</th>
+      <th width="180">Main diag. reflection</th>
+      <th width="180">Anti-diag. reflection</th>
     </tr>
     <tr>
       <td><img src="misc/sym_4_fliph.png" width="300px"></td>
@@ -316,12 +321,12 @@ streamlit run app.py
 
 ## Future Work
 
-- [ ] Zoom / fullscreen mode για τη σκακιέρα
-- [ ] Σύγκριση απόδοσης μεταξύ διαφορετικών παραμέτρων
-- [ ] Export λύσης σε PNG
-- [ ] Animated replay της εξέλιξης ανά γενεά
+- [ ] Zoom / fullscreen mode for the chessboard
+- [ ] Performance comparison across different parameters
+- [ ] Export solution to PNG
+- [ ] Animated replay of the evolution per generation
 
-## Βιβλιογραφία
+## References
 
 - Russell, S., & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th ed.). Pearson.
 - Goldberg, D. E. (1989). *Genetic Algorithms in Search, Optimization, and Machine Learning*. Addison-Wesley.

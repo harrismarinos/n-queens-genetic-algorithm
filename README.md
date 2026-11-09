@@ -319,13 +319,6 @@ Symmetry example for N=8 — the same unique solution and its 7 transformations:
   </table>
 </div>
 
-## Future Work
-
-- [ ] Zoom / fullscreen mode for the chessboard
-- [ ] Performance comparison across different parameters
-- [ ] Export solution to PNG
-- [ ] Animated replay of the evolution per generation
-
 ## References
 
 - Russell, S., & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach* (4th ed.). Pearson.
